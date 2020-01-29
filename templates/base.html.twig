@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{% block title %}Bienvenue sur le portail de Présence Verte{% endblock %}</title>
+
+        {{ include('favicon.html.twig') }}
+        {{ include('script.html.twig') }}
+        {{ include('css.html.twig') }}
+        {% block stylesheets %}{% endblock %}
+
+    </head>
+    <body class="hold-transition sidebar-mini layout-fixed sidebar-collapse">
+        <div class="wrapper">
+
+            {{ include('navbarheader.html.twig') }}
+            {{ include('navbarleft.html.twig') }}
+
+            <div class="content-wrapper">             
+                {% include 'headercontent.html.twig' with {appliTitre: block('appliTitre')} %}
+                <section class="content">
+                    <div class="container-fluid">
+
+                         {% block body %}{% endblock %}
+                    </div>
+                </div>           
+            </div>    
+        
+        
+
+            {{ include('footer.html.twig') }}
+        </div>
+        <!-- ./wrapper -->
+
+        
+        
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>
