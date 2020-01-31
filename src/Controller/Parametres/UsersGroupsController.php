@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Form\Parametres\UsersGroups\ServicesType;
 use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
 use App\Repository\Parametres\UsersGroups\UsersRepository;
+use App\Repository\Parametres\UsersGroups\GroupsRepository;
 use App\Repository\Parametres\UsersGroups\ServicesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -52,9 +53,11 @@ class UsersGroupsController extends AbstractController
         if(!$services){
             $breadcrumbs->addItem("Ajout Service");
             $services = new Services();
+            $titre = "Creation d'un service";
         }else
         {
             $breadcrumbs->addItem("Modification Service");
+            $titre = "Modification du service";
         }
 
         $breadcrumbs->prependRouteItem("Accueil", "dash_board");
@@ -72,13 +75,14 @@ class UsersGroupsController extends AbstractController
 
         return $this->render('parametres/users_groups/formServices.html.twig',[
             "service" => $services,
-            "form" => $form->createView()
+            "form" => $form->createView(),
+            "titre" => $titre
         ]);
     }
 
      /**
      * @Route("/parametres/users_groups/groupes/creation", name="parametres_users_groups_creationGroupes")
-     * @Route("/parametres/users_groups/groupes/{id}", name="parametres_users_groups_modifGroupes", methods="GET|POST")
+     * @Route("/parametres/users_groups/groupes/modification/{id}", name="parametres_users_groups_modifGroupes", methods="GET|POST")
      */
     public function modificationGroupes(Groups $groupes = null, Request $request, EntityManagerInterface $om, Breadcrumbs $breadcrumbs){
 
@@ -88,9 +92,11 @@ class UsersGroupsController extends AbstractController
         if(!$groupes){
             $breadcrumbs->addItem("Ajout Groupe");
             $groupes = new Groups();
+            $titre = "Creation d'un groupe";
         }else
         {
             $breadcrumbs->addItem("Modification Groupe");
+            $titre = "Modification du groupe";
         }
 
         $breadcrumbs->prependRouteItem("Accueil", "dash_board");
@@ -108,13 +114,14 @@ class UsersGroupsController extends AbstractController
 
         return $this->render('parametres/users_groups/formGroupes.html.twig',[
             "groupe" => $groupes,
-            "form" => $form->createView()
+            "form" => $form->createView(),
+            "titre" => $titre
         ]);
     }
 
      /**
      * @Route("/parametres/users_groups/users/creation", name="parametres_users_groups_creationUsers")
-     * @Route("/parametres/users_groups/users/{id}", name="parametres_users_groups_modifUsers", methods="GET|POST")
+     * @Route("/parametres/users_groups/users/modification/{id}", name="parametres_users_groups_modifUsers", methods="GET|POST")
      */
     public function modificationUsers(Users $users = null, Request $request, EntityManagerInterface $om, Breadcrumbs $breadcrumbs){
 
@@ -124,9 +131,11 @@ class UsersGroupsController extends AbstractController
         if(!$users){
             $breadcrumbs->addItem("Ajout Utilisateur");
             $users = new Users();
+            $titre = "Création d'un utlisateur";
         }else
         {
             $breadcrumbs->addItem("Modification Utilisateur");
+            $titre = "Modification d'un utilisateur";
         }
 
         $breadcrumbs->prependRouteItem("Accueil", "dash_board");
@@ -144,7 +153,8 @@ class UsersGroupsController extends AbstractController
 
         return $this->render('parametres/users_groups/formUsers.html.twig',[
             "groupe" => $users,
-            "form" => $form->createView()
+            "form" => $form->createView(),
+            "titre" => $titre
         ]);
     }
 
@@ -173,8 +183,7 @@ class UsersGroupsController extends AbstractController
         $enregistrements = $repository->search(
             $filters, $start, $length
         );
- 
-  var_dump($enregistrements);
+
         //boucle des enregistrements trouvés
         foreach ($enregistrements as $enregistrement) {
             //initialiasation du sous tableau de données  à envoyer en Json
@@ -182,8 +191,11 @@ class UsersGroupsController extends AbstractController
 
             //ajoute au tableau pour chaque ligne
             $sub_array[] = $enregistrement->getId();
+            $sub_array[] = $enregistrement->getUsername();
             $sub_array[] = $enregistrement->getNom();
             $sub_array[] = $enregistrement->getPrenom();   
+            $sub_array[] = '<a class="edit" title="Editer" data-toggle="tooltip" href="'.$this->generateUrl('parametres_users_groups_modifUsers', ['id' => $enregistrement->getId()]).'"><i class="far fa-edit"></i></a>
+            <a class="delete" title="Supprimer" data-toggle="tooltip"><i class="far fa-trash-alt"></i></a>';
             $data[] = $sub_array;
         }
 
@@ -218,14 +230,14 @@ class UsersGroupsController extends AbstractController
         $search = $request->get('search');
         
         $filters = [
-            'search' => "",
+            'search' => $search["value"],
         ];
  
         //recherche dans la base les données filtrées
         $enregistrements = $repository->search(
             $filters, $start, $length
         );
- var_dump($enregistrements);
+
          //boucle des enregistrements trouvés
         foreach ($enregistrements as $enregistrement) {
             //initialiasation du sous tableau de données  à envoyer en Json
@@ -235,6 +247,8 @@ class UsersGroupsController extends AbstractController
             $sub_array[] = $enregistrement->getId();
             $sub_array[] = $enregistrement->getName();
             $sub_array[] = $enregistrement->getDescription(); 
+            $sub_array[] = '<a class="edit" title="Editer" data-toggle="tooltip" href="'.$this->generateUrl('parametres_users_groups_modifServices', ['id' => $enregistrement->getId()]).'"><i class="far fa-edit"></i></a>
+            <a class="delete" title="Supprimer" data-toggle="tooltip"><i class="far fa-trash-alt"></i></a>';
             $data[] = $sub_array;
         }
 
@@ -251,5 +265,75 @@ class UsersGroupsController extends AbstractController
  
         //envoi en json a datatable   
         return new Response(json_encode($output), 200, ['Content-Type' => 'application/json']);
+    }
+     /**
+     * @Route("/parametres/users_groups/groupes/table", name="table_groupes")
+     */
+    public function groupesTable(Request $request, GroupsRepository $repository)
+    {
+        //initialise le tableau a envoyer
+        $data = array();
+
+        //recuperation des filtres
+        $length = $request->get('length');
+        $length = $length && ($length!=-1)?$length:0;
+ 
+        $start = $request->get('start');
+        $start = $length?($start && ($start!=-1)?$start:0)/$length:0;
+ 
+        $search = $request->get('search');
+        
+        $filters = [
+            'search' => $search["value"],
+        ];
+ 
+        //recherche dans la base les données filtrées
+        $enregistrements = $repository->search(
+            $filters, $start, $length
+        );
+
+         //boucle des enregistrements trouvés
+        foreach ($enregistrements as $enregistrement) {
+            //initialiasation du sous tableau de données  à envoyer en Json
+            $sub_array = array();
+
+            //ajoute au tableau pour chaque ligne
+            $sub_array[] = $enregistrement->getId();
+            $sub_array[] = $enregistrement->getName();
+            $sub_array[] = $enregistrement->getDescription(); 
+            $sub_array[] = $enregistrement->getRoles(); 
+            $sub_array[] = '<a class="edit" title="Editer" data-toggle="tooltip" href="'.$this->generateUrl('parametres_users_groups_modifGroupes', ['id' => $enregistrement->getId()]).'"><i class="far fa-edit"></i></a>
+            <a class="delete" title="Supprimer" data-toggle="tooltip"><i class="far fa-trash-alt"></i></a>';
+            $data[] = $sub_array;
+        }
+
+
+        //parametre datatable
+         $output = array(
+            "draw"    => intval( $request->get('draw')),
+            "recordsTotal"  =>   count($repository->search(array(), 0, false)),
+            "recordsFiltered" => count( $repository->search($filters, 0, false)),
+            "data"    => $data,
+            "erreur"    => 2     
+           ); 
+
+ 
+        //envoi en json a datatable   
+        return new Response(json_encode($output), 200, ['Content-Type' => 'application/json']);
+    }
+
+    /**
+     * @Route("/parametres/users_groups/groupes/suppression/{id}", name="admin_aliment_suppression", methods="delete")
+     */
+    public function suppressionGroupes(Groups $group = null, Request $request, EntityManagerInterface $objectManager )
+    {
+        if ($this->isCsrfTokenValid("SUP". $group->getId(),$request->get('_token'))){
+            $objectManager->remove($group);
+            $objectManager->flush();
+            $this->addFlash("success","La suppression a été effectuée");
+            return $this->redirectToRoute("admin_aliment");
+
+        }
+
     }
 }

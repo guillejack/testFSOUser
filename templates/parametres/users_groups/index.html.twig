@@ -7,6 +7,7 @@
   <!-- DataTables -->
   <link rel="stylesheet" href="{{asset('css/bootstrap/dataTables.bootstrap4.css')}}">
   <link rel="stylesheet" href="{{asset('css/bootstrap/buttons.bootstrap4.css')}}">
+  <link rel="stylesheet" href="{{asset('css/bootstrap/bootstrap.min.css')}}">
   <link rel="stylesheet" href="{{asset('css/jquery/jquery-ui-redmond.css')}}">
   <link href="{{asset('css/bootstrap/bootstrap-toggle.min.css')}}" rel="stylesheet">
   <link href="{{asset('css/toastr/toastr.min.css')}}" rel="stylesheet">
@@ -19,7 +20,7 @@
          <div class="card-header p-0 pt-1 border-bottom-0">
            <ul class="nav nav-tabs nav-justified" id="custom-tabs-two-tab" role="tablist">
              <li class="nav-item">
-               <a class="nav-link {% if selectTab == 'utilisateurs' or selectTab == '' %} active {% endif %} " id="custom-tabs-two-home-tab" data-toggle="pill" href="#custom-tabs-two-home" role="tab" aria-controls="custom-tabs-two-home" aria-selected="true">Utilisateurs</a>
+               <a class="nav-link {% if selectTab == 'utilisateurs' or selectTab == '' %} active {% endif %} " id="custom-tabs-two-home-tab" data-toggle="pill" href="#custom-tabs-two-home" role="tab" aria-controls="custom-tabs-two-home" aria-selected="true">Utilisateurs l'un</a>
              </li>
              <li class="nav-item">
                <a class="nav-link {% if selectTab == 'groupes' %} active {% endif %} " id="custom-tabs-two-profile-tab" data-toggle="pill" href="#custom-tabs-two-profile" role="tab" aria-controls="custom-tabs-two-profile" aria-selected="false">Groupes</a>
@@ -37,8 +38,11 @@
                      <table id="users_data" class="table table-bordered  table-hover">
                         <thead>
                            <tr>
+                              <th>id</th>
+                              <th>Nom de connexion</th>
                               <th>Nom</th>
                               <th>Prénom</th>
+                              <th>Action</th>
                            </tr>
                         </thead>
                      </table>
@@ -62,9 +66,11 @@
                      <table id="groups_data" class="table table-bordered  table-hover">
                         <thead>
                            <tr>
+                              <th>id</th>
                               <th>Nom</th>
                               <th>Description</th>
                               <th>Rôle</th>
+                              <th>Action</th>
                            </tr>
                         </thead>
                      </table>
@@ -91,6 +97,7 @@
                                  <th>id</th>
                                  <th>Nom</th>
                                  <th>Description</th>
+                                 <th>Action</th>
                               </tr>
                            </thead>
                         </table>
@@ -132,12 +139,13 @@
 $(document).ready(function(){
 
    var dataTableUsers;
-   //fetch_data_users();
+   fetch_data_users();
 
    var dataTableServices;
    fetch_data_services();
 
-
+   var dataTableGroupes;
+   fetch_data_groupes();
 
   function fetch_data_users()
   {
@@ -149,8 +157,11 @@ $(document).ready(function(){
                },
            "bAutoWidth": false,
            "aoColumns" : [
-                   { sWidth: '40px' }, //TR
-                   { sWidth: '20px' }, //IDCLIENT
+                  {"sTitle": "id", "bVisible": false}, 
+                   { sWidth: '40px' }, 
+                   { sWidth: '20px' },
+                   { sWidth: '20px' },  
+                   { sWidth: '20px' },  
                ]  ,
            "processing" : true,
            "serverSide" : true,
@@ -182,21 +193,64 @@ $(document).ready(function(){
       fixedHeader: true,
       "aoColumns" : [
             {"sTitle": "id", "bVisible": false}, 
-            { sWidth: '40px' }, //TR
-            { sWidth: '20px' }, //IDCLIENT
+            { sWidth: '40px' }, 
+            { sWidth: '20px' }, 
+            { sWidth: '20px' }, 
+
          ],
-      lengthMenu: [[25, 100, -1], [25, 100, "Tous"]],
-      pageLength: 25,
-      "order" : [],
-      "ordering": false,
+         "processing" : true,
+         "serverSide" : true,
+         lengthMenu: [[25, 100, -1], [25, 100, "Tous"]],
+         pageLength: 25,
+         "order" : [],
+         "ordering": false,
       "ajax" : {
          url:"{{ path('table_services') }}",
          type:"POST",
          data:{
          }
       },
+      dom: 'lfrtip',
+      "searching": true,
    });
- }
+ };
+
+ function fetch_data_groupes()
+ {
+  dataTableGroupes = $('#groups_data').DataTable({
+     language: {
+
+              url: "{{asset('js/French.json')}}"
+
+           },
+     "bAutoWidth": false,
+     responsive: true,
+     fixedHeader: true,
+     "aoColumns" : [
+           {"sTitle": "id", "bVisible": false}, 
+           { sWidth: '40px' }, //
+           { sWidth: '20px' }, //
+           { sWidth: '20px' }, //
+           { sWidth: '20px' }, 
+        ],
+        "processing" : true,
+        "serverSide" : true,
+        lengthMenu: [[25, 100, -1], [25, 100, "Tous"]],
+        pageLength: 25,
+        "order" : [],
+        "ordering": false,
+     "ajax" : {
+        url:"{{ path('table_groupes') }}",
+        type:"POST",
+        data:{
+        }
+     },
+     dom: 'lfrtip',
+     "searching": true,
+  });
+}; 
+
+
 });
 
 </script>

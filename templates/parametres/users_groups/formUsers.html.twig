@@ -1,47 +1,80 @@
 {% extends 'base.html.twig' %}
 
-{% block appliTitre %}Ajouter un utilisateur{% endblock %}
 
+
+{% block stylesheets %}
+<script src="{{asset('js/toastr/toastr.min.js')}}"></script>
+  <!-- DataTables -->
+  <link rel="stylesheet" href="{{asset('css/bootstrap/dataTables.bootstrap4.css')}}">
+  <link rel="stylesheet" href="{{asset('css/bootstrap/buttons.bootstrap4.css')}}">
+  <link rel="stylesheet" href="{{asset('css/bootstrap/bootstrap.min.css')}}">
+  <link rel="stylesheet" href="{{asset('css/jquery/jquery-ui-redmond.css')}}">
+  <link href="{{asset('css/bootstrap/bootstrap-toggle.min.css')}}" rel="stylesheet">
+  <link href="{{asset('css/toastr/toastr.min.css')}}" rel="stylesheet">
+{% endblock %}   
+
+{% block appliTitre %}{{ titre }}{% endblock %}
 
 {% block body %}
 
 {{form_start(form)}}
-<div class="row">
-    <div class="col-md-4">
+<div class="row mt-4">
+    <div class="col-md-12">
        <div class="card card-primary card-outline card-tabs">
-            <div class="card-header p-0 pt-1 border-bottom-0">                
+            <div class="card-header p-0 pt-1 border-bottom-0">
+                <ul class="nav nav-tabs nav-justified" id="custom-tabs-two-tab" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link  active  " id="custom-tabs-two-home-tab" data-toggle="pill" href="#custom-tabs-two-home" role="tab" aria-controls="custom-tabs-two-home" aria-selected="true">Utilisateur</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link  " id="custom-tabs-two-profile-tab" data-toggle="pill" href="#custom-tabs-two-profile" role="tab" aria-controls="custom-tabs-two-profile" aria-selected="false">Groupes</a>
+                    </li>
+                </ul>                            
             </div>
             <div class="card-body">
-                {{ form_label(form.username, "Nom de conexion : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
-                {{ form_widget(form.username, {'attr': {'autocomplete':'off',  'class':'col-sm-5 form-control' } } ) }}
-                {{ form_label(form.password, "Mot de passe : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
-                {{ form_widget(form.password, {'attr': {'autocomplete':'off',  'class':'form-control' } } ) }}
-                {{ form_label(form.nom, "Nom : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
-                {{ form_widget(form.nom, {'attr': {'autocomplete':'off',  'class':'col-sm-5 form-control' } } ) }}
-                {{ form_label(form.prenom, "Prénom : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
-                {{ form_widget(form.prenom, {'attr': {  'class':' form-control' } } ) }}
-                {{ form_label(form.DDN, "Date de naissance : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
-                {{ form_widget(form.DDN, {'attr': {  'class':'date' } } ) }}
-                {{ form_label(form.email, "Email : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
-                {{ form_widget(form.email, {'attr': {  'class':' form-control' } } ) }}
-                {{ form_label(form.tel_interne, "Téléphone interne : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
-                {{ form_widget(form.tel_interne, {'attr': {  'class':' form-control' } } ) }}
-                {{ form_label(form.tel_portable, "Téléphone portable : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
-                {{ form_widget(form.tel_portable, {'attr': {  'class':' form-control' } } ) }}
-                {{ form_label(form.photo, "Photo : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
-                {{ form_widget(form.photo, {'attr': {  'class':' form-control' } } ) }}
-                {{ form_label(form.service, "Service : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
-                {{ form_widget(form.service, {'attr': {  'class':' form-control' } } ) }}
-                {{ form_label(form.roles, "Groupe : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
-                {{ form_widget(form.roles, {'attr': {  'class':' form-control' } } ) }}
-                {{ form_label(form.isActive, "Actif : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
-                {{ form_widget(form.isActive, {'attr': {  'class':' form-control' } } ) }}
-                {{ form_label(form.creationDate, "Date de création : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
-                {{ form_widget(form.creationDate, {'attr': {  'class':' form-control date'  } } ) }}  
-                
+                <div class="tab-content" id="custom-tabs-two-tabContent">
+                  <div class="tab-pane fade   show active" id="custom-tabs-two-home" role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
+                    <div class="row">
+                        <div class="col-md-12">  
+                            {{ form_label(form.username, "Nom de conexion : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
+                            {{ form_widget(form.username, {'attr': {'autocomplete':'off',  'class':'col-sm-5 form-control' } } ) }}
+                            {{ form_label(form.password, "Mot de passe : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
+                            {{ form_widget(form.password, {'attr': {'autocomplete':'off',  'class':'form-control' } } ) }}
+                            {{ form_label(form.nom, "Nom : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
+                            {{ form_widget(form.nom, {'attr': {'autocomplete':'off',  'class':'col-sm-5 form-control' } } ) }}
+                            {{ form_label(form.prenom, "Prénom : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
+                            {{ form_widget(form.prenom, {'attr': {  'class':' form-control' } } ) }}
+                            {{ form_label(form.DDN, "Date de naissance : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
+                            {{ form_widget(form.DDN, {'attr': {  'class':'date' } } ) }}
+                            {{ form_label(form.email, "Email : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
+                            {{ form_widget(form.email, {'attr': {  'class':' form-control' } } ) }}
+                            {{ form_label(form.tel_interne, "Téléphone interne : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
+                            {{ form_widget(form.tel_interne, {'attr': {  'class':' form-control' } } ) }}
+                            {{ form_label(form.tel_portable, "Téléphone portable : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
+                            {{ form_widget(form.tel_portable, {'attr': {  'class':' form-control' } } ) }}
+                            {{ form_label(form.photo, "Photo : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
+                            {{ form_widget(form.photo, {'attr': {  'class':' form-control' } } ) }}
+                            {{ form_label(form.service, "Service : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
+                            {{ form_widget(form.service, {'attr': {  'class':' form-control' } } ) }}
+                            {{ form_label(form.isActive, "Actif : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
+                            {{ form_widget(form.isActive, {'attr': {  'class':' form-control' } } ) }}
+                            {{ form_label(form.creationDate, "Date de création : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
+                            {{ form_widget(form.creationDate, {'attr': {  'class':' form-control date'  } } ) }}  
+                        </div> 
+                    </div>     
+                  </div>                               
+                 <div class="tab-pane fade " id="custom-tabs-two-profile" role="tabpanel" aria-labelledby="custom-tabs-two-profile-tab">
+                    <div class="row overflow-auto">
+                        <div class="col-md-12">
+                            {{ form_label(form.roles, "Groupe : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
+                            {{ form_widget(form.roles, {'attr': {  'class':' form-control' } } ) }}
+                        </div> 
+                    </div>
+                  </div>                  
+                </div>
             </div>
-            <div class="card-footer justify-content-between">                
-                <div class="row">
+        <div class="card-footer justify-content-between">    
+            <div class="row">
                     <div class="col-md-4">                        
                         <a href="{{path('parametres_users_groups', {selectTab: "utilisateurs"} )}}" class="btn btn-primary">Retour</a>
                     </div>
@@ -50,12 +83,14 @@
                     <div class="col-md-4" align="right">                        
                         <input type="submit" value="Valider" class ="btn btn-success">
                     </div>                    
-                </div>                
-            </div>
-        </div>        
-    </div> 
-</div>     
-{{form_end(form)}}       
+            </div> 
+        </div>       
+        </div>
+              <!-- /.card -->
+    </div>
+</div>    
+{{form_end(form)}} 
+ 
             
 
         

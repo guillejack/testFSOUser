@@ -1,7 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block appliTitre %}Ajouter un service{% endblock %}
+{% block appliTitre %}{{ titre }}{% endblock %}
 
+{% block stylesheets %}
+<script src="{{asset('js/toastr/toastr.min.js')}}"></script>
+  <!-- DataTables -->
+  <link rel="stylesheet" href="{{asset('css/bootstrap/dataTables.bootstrap4.css')}}">
+  <link rel="stylesheet" href="{{asset('css/bootstrap/buttons.bootstrap4.css')}}">
+  <link rel="stylesheet" href="{{asset('css/bootstrap/bootstrap.min.css')}}">
+  <link rel="stylesheet" href="{{asset('css/jquery/jquery-ui-redmond.css')}}">
+  <link href="{{asset('css/bootstrap/bootstrap-toggle.min.css')}}" rel="stylesheet">
+  <link href="{{asset('css/toastr/toastr.min.css')}}" rel="stylesheet">
+{% endblock %}   
 
 {% block body %}
 

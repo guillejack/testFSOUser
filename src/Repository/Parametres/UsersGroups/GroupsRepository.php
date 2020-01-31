@@ -47,4 +47,28 @@ class GroupsRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function search($filter, $page = 0, $max = NULL, $getResult = true)
+    {
+        $qb = $this->createQueryBuilder('a')
+              ->select('a');
+                  
+         if (isset($filter['search']) && $filter['search'] )
+         {
+            $qb->andWhere('a.name like :search or a.description like :search ')
+            ->setParameter('search', "%".$filter['search']."%"); 
+         }
+          
+        $qb->orderBy('a.name', 'ASC');
+
+        if ($max) {
+            $qb ->setMaxResults($max)
+                ->setFirstResult($page * $max)
+            ;
+            //$this->getQuery();
+        }
+
+        return $qb->getQuery()
+        ->getResult();
+
+    }
 }
