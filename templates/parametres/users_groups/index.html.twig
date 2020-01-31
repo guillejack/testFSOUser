@@ -1,0 +1,203 @@
+{% extends 'base.html.twig' %}
+
+{% block appliTitre %}Utilisateurs / Groupes{% endblock %}
+
+{% block stylesheets %}
+<script src="{{asset('js/toastr/toastr.min.js')}}"></script>
+  <!-- DataTables -->
+  <link rel="stylesheet" href="{{asset('css/bootstrap/dataTables.bootstrap4.css')}}">
+  <link rel="stylesheet" href="{{asset('css/bootstrap/buttons.bootstrap4.css')}}">
+  <link rel="stylesheet" href="{{asset('css/jquery/jquery-ui-redmond.css')}}">
+  <link href="{{asset('css/bootstrap/bootstrap-toggle.min.css')}}" rel="stylesheet">
+  <link href="{{asset('css/toastr/toastr.min.css')}}" rel="stylesheet">
+{% endblock %}   
+
+{% block body %}
+<div class="row">
+   <div class="col-md-12">
+      <div class="card card-primary card-outline card-tabs">
+         <div class="card-header p-0 pt-1 border-bottom-0">
+           <ul class="nav nav-tabs nav-justified" id="custom-tabs-two-tab" role="tablist">
+             <li class="nav-item">
+               <a class="nav-link {% if selectTab == 'utilisateurs' or selectTab == '' %} active {% endif %} " id="custom-tabs-two-home-tab" data-toggle="pill" href="#custom-tabs-two-home" role="tab" aria-controls="custom-tabs-two-home" aria-selected="true">Utilisateurs</a>
+             </li>
+             <li class="nav-item">
+               <a class="nav-link {% if selectTab == 'groupes' %} active {% endif %} " id="custom-tabs-two-profile-tab" data-toggle="pill" href="#custom-tabs-two-profile" role="tab" aria-controls="custom-tabs-two-profile" aria-selected="false">Groupes</a>
+             </li>
+             <li class="nav-item">
+               <a class="nav-link {% if selectTab == 'services' %} active {% endif %} " id="custom-tabs-two-messages-tab" data-toggle="pill" href="#custom-tabs-two-messages" role="tab" aria-controls="custom-tabs-two-messages" aria-selected="false">Services</a>
+             </li>
+           </ul>
+         </div>
+         <div class="card-body">
+           <div class="tab-content" id="custom-tabs-two-tabContent">
+             <div class="tab-pane fade   {% if selectTab == 'utilisateurs' or selectTab == '' %}  show active {% endif %}" id="custom-tabs-two-home" role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
+               <div class="row">
+                  <div class="col-md-12">  
+                     <table id="users_data" class="table table-bordered  table-hover">
+                        <thead>
+                           <tr>
+                              <th>Nom</th>
+                              <th>Prénom</th>
+                           </tr>
+                        </thead>
+                     </table>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-4">                 
+                  </div>    
+                  <div class="col-md-4">        
+                  </div>
+                  <div class="col-md-4">
+                      <div align="right" id="divboutton">
+                         <a class="btn btn-info" href="{{path('parametres_users_groups_creationUsers')}}">Ajouter</a>
+                      </div>        
+                  </div>
+               </div>              
+            </div>
+             <div class="tab-pane fade {% if selectTab == 'groupes' %} show active {% endif %} " id="custom-tabs-two-profile" role="tabpanel" aria-labelledby="custom-tabs-two-profile-tab">
+               <div class="row">
+                  <div class="col-md-12">  
+                     <table id="groups_data" class="table table-bordered  table-hover">
+                        <thead>
+                           <tr>
+                              <th>Nom</th>
+                              <th>Description</th>
+                              <th>Rôle</th>
+                           </tr>
+                        </thead>
+                     </table>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-4">                 
+                  </div>    
+                  <div class="col-md-4">        
+                  </div>
+                  <div class="col-md-4">
+                      <div align="right" id="divboutton">
+                        <a class="btn btn-info" href="{{path('parametres_users_groups_creationGroupes')}}">Ajouter</a>
+                      </div>        
+                  </div>
+               </div>   
+             </div>
+             <div class="tab-pane fade {% if selectTab == 'services' %} show active {% endif %}" id="custom-tabs-two-messages" role="tabpanel" aria-labelledby="custom-tabs-two-messages-tab">
+                  <div class="row">
+                     <div class="col-md-12">  
+                        <table id="services_data" class="table table-bordered  table-hover">
+                           <thead>
+                              <tr>
+                                 <th>id</th>
+                                 <th>Nom</th>
+                                 <th>Description</th>
+                              </tr>
+                           </thead>
+                        </table>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-4">                 
+                     </div>    
+                     <div class="col-md-4">        
+                     </div>
+                     <div class="col-md-4">
+                         <div align="right" id="divboutton">
+                             <a class="btn btn-info" href="{{path('parametres_users_groups_creationServices')}}">Ajouter</a>
+                         </div>        
+                     </div>
+                  </div>                             
+               </div>
+           </div>
+         </div>
+         <!-- /.card -->
+   </div>
+<!-- /.row -->
+</div>   
+
+
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{asset('js/datatables/jquery.dataTables.js')}}"></script>
+<script src="{{asset('js/datatables/dataTables.bootstrap4.js')}}"></script>
+<!-- Bootstrap Switch -->
+<script src="{{asset('js/bootstrap/bootstrap-toggle.min.js')}}"></script>
+<script src="{{asset('js/jquery/jquery.form.js')}}"></script>
+
+
+
+<script type="text/javascript" language="javascript" >
+
+$(document).ready(function(){
+
+   var dataTableUsers;
+   //fetch_data_users();
+
+   var dataTableServices;
+   fetch_data_services();
+
+
+
+  function fetch_data_users()
+  {
+   dataTableUsers = $('#users_data').DataTable({
+           language: {
+
+                   url: "{{asset('js/French.json')}}"
+
+               },
+           "bAutoWidth": false,
+           "aoColumns" : [
+                   { sWidth: '40px' }, //TR
+                   { sWidth: '20px' }, //IDCLIENT
+               ]  ,
+           "processing" : true,
+           "serverSide" : true,
+           lengthMenu: [[25, 100, -1], [25, 100, "Tous"]],
+           pageLength: 25,
+           "order" : [],
+           "ordering": false,
+           "ajax" : {
+           url:"{{ path('table_users') }}",
+           type:"POST",
+               data:{
+
+               }
+           },
+           dom: 'lfrtip',
+       });
+  } ;
+
+  function fetch_data_services()
+  {
+   dataTableServices = $('#services_data').DataTable({
+      language: {
+
+               url: "{{asset('js/French.json')}}"
+
+            },
+      "bAutoWidth": false,
+      responsive: true,
+      fixedHeader: true,
+      "aoColumns" : [
+            {"sTitle": "id", "bVisible": false}, 
+            { sWidth: '40px' }, //TR
+            { sWidth: '20px' }, //IDCLIENT
+         ],
+      lengthMenu: [[25, 100, -1], [25, 100, "Tous"]],
+      pageLength: 25,
+      "order" : [],
+      "ordering": false,
+      "ajax" : {
+         url:"{{ path('table_services') }}",
+         type:"POST",
+         data:{
+         }
+      },
+   });
+ }
+});
+
+</script>
+{% endblock %}

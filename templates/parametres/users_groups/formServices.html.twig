@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block appliTitre %}Ajouter un service{% endblock %}
+
+
+{% block body %}
+
+{{form_start(form)}}
+<div class="row">
+    <div class="col-md-4">
+       <div class="card card-primary card-outline card-tabs">
+            <div class="card-header p-0 pt-1 border-bottom-0">
+                
+            </div>
+            <div class="card-body">
+                {{form_widget(form)}}
+            </div>
+            <div class="card-footer justify-content-between">
+
+                
+                <div class="row">
+                    <div class="col-md-4">                        
+                        <a href="{{path('parametres_users_groups', {selectTab: "services"} )}}" class="btn btn-primary">Retour</a>
+                    </div>
+                    <div class="col-md-4">                        
+                    </div>
+                    <div class="col-md-4" align="right">                        
+                        <input type="submit" value="Valider" class ="btn btn-success">
+                    </div>                    
+                </div>                
+            </div>
+        </div>        
+    </div> 
+</div>     
+{{form_end(form)}}       
+            
+
+        
+
+{% endblock %}
