@@ -20,7 +20,7 @@ class GroupsType extends AbstractType
 
         $form =  $builder->getData();
         $builder
-            ->add('roles')
+            ->add('role')
             ->add('name')
             ->add('description')
             /*->add('users', EntityType::class, [

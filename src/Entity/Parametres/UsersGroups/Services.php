@@ -24,14 +24,14 @@ class Services
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Parametres\UsersGroups\Users", mappedBy="service")
-     */
-    private $users;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $description;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Parametres\UsersGroups\Users", mappedBy="service")
+     */
+    private $users;
 
     public function __construct()
     {
@@ -51,6 +51,18 @@ class Services
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }
@@ -82,18 +94,6 @@ class Services
                 $user->setService(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(?string $description): self
-    {
-        $this->description = $description;
 
         return $this;
     }

@@ -2,14 +2,15 @@
 
 namespace App\Entity\Parametres\UsersGroups;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Parametres\UsersGroups\UsersRepository")
  */
-class Users
+class Users implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -41,7 +42,7 @@ class Users
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $DDN;
+    private $ddn;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
@@ -64,6 +65,21 @@ class Users
     private $photo;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $is_active;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $last_login_date;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $creation_date;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Parametres\UsersGroups\Services", inversedBy="users")
      */
     private $service;
@@ -71,26 +87,11 @@ class Users
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Parametres\UsersGroups\Groups", inversedBy="users")
      */
-    private $roles;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $isActive;
-
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $lastLoginDate;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $creationDate;
+    private $Groupes;
 
     public function __construct()
     {
-        $this->roles = new ArrayCollection();
+        $this->Groupes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -146,14 +147,14 @@ class Users
         return $this;
     }
 
-    public function getDDN(): ?\DateTimeInterface
+    public function getDdn(): ?\DateTimeInterface
     {
-        return $this->DDN;
+        return $this->ddn;
     }
 
-    public function setDDN(?\DateTimeInterface $DDN): self
+    public function setDdn(?\DateTimeInterface $ddn): self
     {
-        $this->DDN = $DDN;
+        $this->ddn = $ddn;
 
         return $this;
     }
@@ -206,6 +207,42 @@ class Users
         return $this;
     }
 
+    public function getIsActive(): ?bool
+    {
+        return $this->is_active;
+    }
+
+    public function setIsActive(bool $is_active): self
+    {
+        $this->is_active = $is_active;
+
+        return $this;
+    }
+
+    public function getLastLoginDate(): ?\DateTimeInterface
+    {
+        return $this->last_login_date;
+    }
+
+    public function setLastLoginDate(?\DateTimeInterface $last_login_date): self
+    {
+        $this->last_login_date = $last_login_date;
+
+        return $this;
+    }
+
+    public function getCreationDate(): ?\DateTimeInterface
+    {
+        return $this->creation_date;
+    }
+
+    public function setCreationDate(?\DateTimeInterface $creation_date): self
+    {
+        $this->creation_date = $creation_date;
+
+        return $this;
+    }
+
     public function getService(): ?Services
     {
         return $this->service;
@@ -221,62 +258,44 @@ class Users
     /**
      * @return Collection|Groups[]
      */
-    public function getRoles(): Collection
+    public function getGroupes(): Collection
     {
-        return $this->roles;
+        return $this->Groupes;
     }
 
-    public function addRole(Groups $role): self
+    public function addGroupe(Groups $groupe): self
     {
-        if (!$this->roles->contains($role)) {
-            $this->roles[] = $role;
+        if (!$this->Groupes->contains($groupe)) {
+            $this->Groupes[] = $groupe;
         }
 
         return $this;
     }
 
-    public function removeRole(Groups $role): self
+    public function removeGroupe(Groups $groupe): self
     {
-        if ($this->roles->contains($role)) {
-            $this->roles->removeElement($role);
+        if ($this->Groupes->contains($groupe)) {
+            $this->Groupes->removeElement($groupe);
         }
 
         return $this;
     }
 
-    public function getIsActive(): ?bool
+    public function eraseCredentials(): void
     {
-        return $this->isActive;
+        
+    }
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+    public function getRoles()
+    {
+        $roles = array();
+        foreach ($this->Groupes as $role) {
+            $roles[] = $role->getRole();
+        }
+            return $roles;
     }
 
-    public function setIsActive(bool $isActive): self
-    {
-        $this->isActive = $isActive;
-
-        return $this;
-    }
-
-    public function getLastLoginDate(): ?\DateTimeInterface
-    {
-        return $this->lastLoginDate;
-    }
-
-    public function setLastLoginDate(?\DateTimeInterface $lastLoginDate): self
-    {
-        $this->lastLoginDate = $lastLoginDate;
-
-        return $this;
-    }
-
-    public function getCreationDate(): ?\DateTimeInterface
-    {
-        return $this->creationDate;
-    }
-
-    public function setCreationDate(\DateTimeInterface $creationDate): self
-    {
-        $this->creationDate = $creationDate;
-
-        return $this;
-    }
 }

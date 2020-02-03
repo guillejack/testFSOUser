@@ -1,13 +1,30 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    encoders:
+        App\Entity\Parametres\UsersGroups\Users:
+            algorithm: auto
     providers:
         in_memory: { memory: null }
+        in_database:
+            entity:
+                class: App\Entity\Parametres\UsersGroups\Users
+                property: username
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             anonymous: lazy
+
+            provider: in_database
+
+            form_login:
+                 login_path: login
+                 check_path: login
+
+            logout:
+                path : deconnexion
+                target: login
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
@@ -18,5 +35,7 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
+      # - { path: ^/, roles: ROLE_USER }
+      # - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      # - { path: ^/, roles: ROLE_USER }
         # - { path: ^/profile, roles: ROLE_USER }

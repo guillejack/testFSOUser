@@ -19,9 +19,9 @@ class Groups
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\Column(type="string", length=255)
      */
-    private $roles;
+    private $role;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -29,7 +29,7 @@ class Groups
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Parametres\UsersGroups\Users", mappedBy="roles")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Parametres\UsersGroups\Users", mappedBy="Groupes")
      */
     private $users;
 
@@ -48,14 +48,14 @@ class Groups
         return $this->id;
     }
 
-    public function getRoles(): ?string
+    public function getRole(): ?string
     {
-        return $this->roles;
+        return $this->role;
     }
 
-    public function setRoles(?string $roles): self
+    public function setRole(string $role): self
     {
-        $this->roles = $roles;
+        $this->role = $role;
 
         return $this;
     }
@@ -84,7 +84,7 @@ class Groups
     {
         if (!$this->users->contains($user)) {
             $this->users[] = $user;
-            $user->addRole($this);
+            $user->addGroupe($this);
         }
 
         return $this;
@@ -94,7 +94,7 @@ class Groups
     {
         if ($this->users->contains($user)) {
             $this->users->removeElement($user);
-            $user->removeRole($this);
+            $user->removeGroupe($this);
         }
 
         return $this;

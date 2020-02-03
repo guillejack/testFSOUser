@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Portail - Présence Verte</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- Custom Theme files -->
+<link href="{{asset('css/login.css')}}" rel="stylesheet" type="text/css" media="all" />
+<!-- //Custom Theme files -->
+<!-- web font -->
+<link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
+<!-- //web font -->
+</head>
+<body>
+	{% if error %}
+    <div class="alert alert-danger">
+        Le login et mdp ne sont pas bon.
+    </div>
+{% endif %}
+	<!-- main -->
+	<div class="main-w3layouts wrapper">
+		<h1>Portail - Présence Verte</h1>
+		<div class="main-agileinfo">
+			<div class="agileits-top">
+				<form action="{{ path('login')}}" method="post">
+          <input name="_username" type="text" class="form-control" placeholder="Utilisateur" value="{{lastUserName}}" autofocus />
+          <input type="password" class="form-control" placeholder="Password" name="_password" value="" />
+					<input type="submit" value="Connexion">
+				</form>
+			</div>
+		</div>
+		<!-- copyright -->
+		<div class="colorlibcopy-agile">
+			<p>© 2018 Colorlib Signup Form. All rights reserved | Design by <a href="https://colorlib.com/" target="_blank">Colorlib</a></p>
+		</div>
+		<!-- //copyright -->
+		<ul class="colorlib-bubbles">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+	<!-- //main -->
+</body>
+</html>

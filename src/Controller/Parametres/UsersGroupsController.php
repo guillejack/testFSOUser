@@ -17,6 +17,7 @@ use App\Repository\Parametres\UsersGroups\UsersRepository;
 use App\Repository\Parametres\UsersGroups\GroupsRepository;
 use App\Repository\Parametres\UsersGroups\ServicesRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UsersGroupsController extends AbstractController
 {
@@ -123,7 +124,7 @@ class UsersGroupsController extends AbstractController
      * @Route("/parametres/users_groups/users/creation", name="parametres_users_groups_creationUsers")
      * @Route("/parametres/users_groups/users/modification/{id}", name="parametres_users_groups_modifUsers", methods="GET|POST")
      */
-    public function modificationUsers(Users $users = null, Request $request, EntityManagerInterface $om, Breadcrumbs $breadcrumbs){
+    public function modificationUsers(Users $users = null, Request $request, EntityManagerInterface $om, Breadcrumbs $breadcrumbs, UserPasswordEncoderInterface $encoder){
 
         $breadcrumbs->addItem("Utilisateurs / Groupes", $this->get("router")->generate("parametres_users_groups"), ['selectTab' => "utilisateurs"]);
         
@@ -145,6 +146,8 @@ class UsersGroupsController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
+            $passwordCrypte = $encoder->encodePassword($users, $users->getPassword());
+            $users->setPassword($passwordCrypte);
             $om->persist($users);
             $om->flush();
             $this->addFlash('success', "L'action a été effectué");
@@ -301,7 +304,7 @@ class UsersGroupsController extends AbstractController
             $sub_array[] = $enregistrement->getId();
             $sub_array[] = $enregistrement->getName();
             $sub_array[] = $enregistrement->getDescription(); 
-            $sub_array[] = $enregistrement->getRoles(); 
+            $sub_array[] = $enregistrement->getRole(); 
             $sub_array[] = '<a class="edit" title="Editer" data-toggle="tooltip" href="'.$this->generateUrl('parametres_users_groups_modifGroupes', ['id' => $enregistrement->getId()]).'"><i class="far fa-edit"></i></a>
             <a class="delete" title="Supprimer" data-toggle="tooltip"><i class="far fa-trash-alt"></i></a>';
             $data[] = $sub_array;
