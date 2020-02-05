@@ -4,11 +4,15 @@ namespace App\Entity\Parametres\UsersGroups;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\Parametres\UsersGroups\UsersRepository")
+ * @Vich\Uploadable
  */
 class Users implements UserInterface
 {
@@ -25,7 +29,7 @@ class Users implements UserInterface
     private $username;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=100 ,  nullable=true)
      */
     private $password;
 
@@ -81,6 +85,7 @@ class Users implements UserInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Parametres\UsersGroups\Services", inversedBy="users")
+     * 
      */
     private $service;
 
@@ -88,6 +93,7 @@ class Users implements UserInterface
      * @ORM\ManyToMany(targetEntity="App\Entity\Parametres\UsersGroups\Groups", inversedBy="users")
      */
     private $Groupes;
+
 
     public function __construct()
     {
@@ -292,6 +298,7 @@ class Users implements UserInterface
     public function getRoles()
     {
         $roles = array();
+        $roles[] = "ROLE_USER";
         foreach ($this->Groupes as $role) {
             $roles[] = $role->getRole();
         }

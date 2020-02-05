@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block appliTitre %}{{ titre }}{% endblock %}
+{% block appliTitre %}{{ titre|raw }}{% endblock %}
 
 {% block stylesheets %}
 <script src="{{asset('js/toastr/toastr.min.js')}}"></script>

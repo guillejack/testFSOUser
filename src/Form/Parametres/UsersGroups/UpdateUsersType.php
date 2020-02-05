@@ -2,7 +2,6 @@
 
 namespace App\Form\Parametres\UsersGroups;
 
-use DateTimeZone;
 use Symfony\Component\Form\AbstractType;
 use App\Entity\Parametres\UsersGroups\Users;
 use App\Entity\Parametres\UsersGroups\Groups;
@@ -12,20 +11,18 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
-class UsersType extends AbstractType
+class UpdateUsersType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('username')
-            ->add('password', PasswordType::class)
             ->add('nom')
             ->add('prenom')
             ->add('DDN',DateType::class , array(
@@ -43,30 +40,13 @@ class UsersType extends AbstractType
             ->add('tel_portable', TelType::class, [
                 'required' => false                
             ])
-/*             ->add('imageFile', FileType::class, [
+            ->add('is_active', CheckboxType::class, [
                 'required' => false,
-                'label' => 'Photo',
-                'attr' => [
-                    'onchange'    => 'previewFile()'
-                ]                 
-            ]) */
-
+                'label'    => "Actif"                
+            ])
             ->add('photo', HiddenType::class, array(
                 'required' => false,
               ))
-            ->add('is_active', CheckboxType::class, [
-                'required' => false,
-                'label'    => "Actif",
-                'data' => true,                 
-            ])
-            ->add('creationDate', DateTimeType::class , array(
-                'html5' => false,
-                'required' => true,
-                'widget' => 'single_text',
-                'data' => new \DateTime("now", new DateTimeZone('Europe/Paris')),
-                'format' => 'dd/MM/yyyy',
-                ))
-
             ->add('service' , EntityType::class, [
                 'class' => Services::class,
                 'choice_label' => 'name',
