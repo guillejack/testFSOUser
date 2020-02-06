@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block appliTitre %}Utilisateurs / Groupes{% endblock %}
+
+{% block stylesheets %}
+<script src="{{asset('js/toastr/toastr.min.js')}}"></script>
+  <!-- DataTables -->
+  <link rel="stylesheet" href="{{asset('css/bootstrap/dataTables.bootstrap4.css')}}">
+  <link rel="stylesheet" href="{{asset('css/bootstrap/buttons.bootstrap4.css')}}">
+  <link rel="stylesheet" href="{{asset('css/bootstrap/bootstrap.min.css')}}">
+  <link rel="stylesheet" href="{{asset('css/jquery/jquery-ui-redmond.css')}}">
+  <link href="{{asset('css/toastr/toastr.min.css')}}" rel="stylesheet">
+
+{% endblock %}   
+
+{% block body %}
+<div class="row">
+   <div class="col-md-12">
+    <table id="ldap_data" class="table table-bordered  table-hover">
+        <thead>
+           <tr>
+              <th>sAMAccountName</th>
+              <th>sn</th>
+              <th>givenName</th>
+              <th>mail</th>
+           </tr>
+        </thead>
+     </table>
+</div>
+<!-- /.row -->
+</div>      
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{asset('js/datatables/jquery.dataTables.js')}}"></script>
+<script src="{{asset('js/datatables/dataTables.bootstrap4.js')}}"></script>
+<!-- Bootstrap Switch -->
+<script src="{{asset('js/bootstrap/bootstrap-toggle.min.js')}}"></script>
+<script src="{{asset('js/jquery/jquery.form.js')}}"></script>
+
+
+
+<script type="text/javascript" language="javascript" >
+    var dataTableLdap;
+    fetch_data_ldap();
+
+    function fetch_data_ldap()
+    {
+        dataTableLdap = $('#ldap_data').DataTable({
+             language: {
+  
+                     url: "{{asset('js/French.json')}}"
+  
+                 },
+             "bAutoWidth": false,
+             "aoColumns" : [
+                     { sWidth: '40px' }, 
+                     { sWidth: '20px' },
+                     { sWidth: '20px' },  
+                     { sWidth: '20px' },  
+                 ]  ,
+             "processing" : true,
+             "serverSide" : true,
+             //lengthMenu: [[25, 100, -1], [25, 100, "Tous"]],
+             //pageLength: 25,
+             //"order" : [],
+             "info":     false,
+             "paging":   false,
+             "ordering": false,
+             "ajax" : {
+             url:"{{ path('table_ldap') }}",
+             type:"POST",
+                 data:{
+  
+                 }
+             },
+             //dom: 'lfrtip',
+         });
+    } ;
+
+    
+</script>
+{% endblock %}

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Applications;
+namespace App\Controller\Applications\Enquete;
 
 use Symfony\Component\Routing\Annotation\Route;
 use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;

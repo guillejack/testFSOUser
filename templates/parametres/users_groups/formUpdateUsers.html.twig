@@ -9,7 +9,6 @@
   <link rel="stylesheet" href="{{asset('css/bootstrap/buttons.bootstrap4.css')}}">
   <link rel="stylesheet" href="{{asset('css/bootstrap/bootstrap.min.css')}}">
   <link rel="stylesheet" href="{{asset('css/jquery/jquery-ui-redmond.css')}}">
-  <link href="{{asset('css/bootstrap/bootstrap-toggle.min.css')}}" rel="stylesheet">
   <link href="{{asset('css/toastr/toastr.min.css')}}" rel="stylesheet">
   <link rel="stylesheet" href="{{asset('css/bootstrap/icheck-bootstrap.min.css')}}">
   <link rel="stylesheet" href="{{asset('css/cropper.css')}}">
@@ -103,7 +102,6 @@
                             {{ form_widget(form.tel_interne, {'attr': {  'autocomplete':'off','class':'col-sm-3 form-control' } } ) }}
                             {{ form_label(form.tel_portable, "Téléphone portable : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
                             {{ form_widget(form.tel_portable, {'attr': {  'autocomplete':'off','class':'col-sm-3 form-control' } } ) }}
-                            {{ form_label(form.photo, "Photo : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
                             {{ form_widget(form.photo, {'attr': {  'class':' form-control' } } ) }}
                             {{ form_label(form.service, "Service : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
                             {{ form_widget(form.service, {'attr': {  'class':'col-sm-5 form-control' } } ) }}

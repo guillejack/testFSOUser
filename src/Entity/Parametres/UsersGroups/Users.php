@@ -94,6 +94,11 @@ class Users implements UserInterface
      */
     private $Groupes;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $type;
+
 
     public function __construct()
     {
@@ -303,6 +308,18 @@ class Users implements UserInterface
             $roles[] = $role->getRole();
         }
             return $roles;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
     }
 
 }

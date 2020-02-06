@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "19f81a8f5406ba2b2e75f30f76f7c374",
+    "content-hash": "e644190e04bc162eb4192ce01709cd27",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -3776,6 +3776,68 @@
                 "intl",
                 "l10n",
                 "localization"
+            ],
+            "time": "2020-01-04T14:08:26+00:00"
+        },
+        {
+            "name": "symfony/ldap",
+            "version": "v5.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/ldap.git",
+                "reference": "c3f78848cbecd690b81166c4ed14b4ad59ed94bc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/ldap/zipball/c3f78848cbecd690b81166c4ed14b4ad59ed94bc",
+                "reference": "c3f78848cbecd690b81166c4ed14b4ad59ed94bc",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ldap": "*",
+                "php": "^7.2.5",
+                "symfony/options-resolver": "^4.4|^5.0"
+            },
+            "conflict": {
+                "symfony/options-resolver": "<4.4",
+                "symfony/security-core": "<5"
+            },
+            "require-dev": {
+                "symfony/security-core": "^5.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Ldap\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Charles Sarrazin",
+                    "email": "charles@sarraz.in"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "An abstraction in front of PHP's LDAP functions, compatible with PHP 5.3.9 onwards.",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "active directory",
+                "ldap"
             ],
             "time": "2020-01-04T14:08:26+00:00"
         },

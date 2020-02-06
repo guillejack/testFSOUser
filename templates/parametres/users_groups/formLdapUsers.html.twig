@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-
+{% block appliTitre %}{{ titre|raw  }}{% endblock %}
 
 {% block stylesheets %}
 <script src="{{asset('js/toastr/toastr.min.js')}}"></script>
@@ -49,11 +49,9 @@
   </style>   
 {% endblock %}   
 
-{% block appliTitre %}{{ titre|raw  }}{% endblock %}
-
 {% block body %}
 
-{{form_start(form, { 'attr' : {'id' : 'profile_user'}  })}}
+{{form_start(form, { 'attr' : {'id' : 'profile_user_edit'}  })}}
 <div class="row mt-4">
     <div class="col-md-12">
        <div class="card card-primary card-outline card-tabs">
@@ -81,8 +79,6 @@
                         <div class="col-6">
                             {{ form_label(form.username, "Nom de conexion : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
                             {{ form_widget(form.username, {'attr': {'autocomplete':'off',  'class':'col-sm-5 form-control' } } ) }}
-                            {{ form_label(form.password, "Mot de passe : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
-                            {{ form_widget(form.password, {'attr': {'autocomplete':'off',  'class':'col-sm-5  form-control' } } ) }}
                         </div>
                         <div class="col-3">
                             {{ form_label(form.is_active, "Actif : " , {'label_attr': {'class': 'form-check-label' , 'for':''}} ) }}
@@ -105,7 +101,6 @@
                             {{ form_widget(form.tel_interne, {'attr': {  'autocomplete':'off','class':'col-sm-3 form-control' } } ) }}
                             {{ form_label(form.tel_portable, "Téléphone portable : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
                             {{ form_widget(form.tel_portable, {'attr': {  'autocomplete':'off','class':'col-sm-3 form-control' } } ) }}
-                            {{ form_label(form.photo, "Photo : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
                             {{ form_widget(form.photo, {'attr': {  'class':' form-control' } } ) }}
                             {{ form_label(form.service, "Service : " , {'label_attr': {'class': 'control-label' , 'for':''}} ) }}
                             {{ form_widget(form.service, {'attr': {  'class':'col-sm-5 form-control' } } ) }}
@@ -138,6 +133,7 @@
                     </div>
                     <div class="col-md-4" align="right">                        
                         <input type="submit" value="Valider" class ="btn btn-success">
+                        <input type="hidden" id="id" name="id" value="{{ user.id }}">
                     </div>                    
             </div> 
         </div>       
@@ -146,161 +142,165 @@
     </div>
 </div>    
 {{form_end(form)}} 
- 
+
+
 <div class="modal  modal-white" id="editModal">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content modal-white ">
-            <div class="modal-header">
-                <h5>Ajouter une photo</h5>
-                <button type="button" class="close" data-dismiss="modal" name="fermeredit" id="fermeredit" aria-label="Close"></button>
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-9">
-                        <form action="{{ path('photoUser')}} " id="form_photo" method="post">
-                        <div id="edition_photo"> <img width="400" height="600" src="" alt="" id="photo_view"> </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="custom-file">
-                            <label for="users_imageFile" class="btn btn-info">Choisir une photo</label>
-                            <input type="file" id="users_imageFile"  name="users_imageFile" onchange="previewFile()" class="input-file " lang="fr" accept=".jpg,.jpeg,.gif,.png"/>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content modal-white ">
+          <div class="modal-header">
+              <h5>Ajouter une photo</h5>
+              <button type="button" class="close" data-dismiss="modal" name="fermeredit" id="fermeredit" aria-label="Close"></button>
+              <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <div class="row">
+                  <div class="col-md-9">
+                      <form action="{{ path('photoUser')}} " id="form_photo_edit" method="post">
+                      <div id="edition_photo"> <img width="400" height="600" src="" alt="" id="photo_view"> </div>
+                  </div>
+                  <div class="col-md-3">
+                      <div class="custom-file">
+                          <label for="users_imageFile" class="btn btn-info">Choisir une photo</label>
+                          <input type="file" id="users_imageFile"  name="users_imageFile" onchange="previewFile()" class="input-file " lang="fr" accept=".jpg,.jpeg,.gif,.png"/>
 
-                        </div>
-                        <div class="custom-file">
+                      </div>
+                      <div class="custom-file">
 
-                        </div>
-                    </div> 
-                                          
-                </div>        
-            </div>
-            <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-default fermer" data-dismiss="modal" name="fermerdiag" id="fermerdiag" aria-label="Close">Fermer</button>
-                <input type="submit" value="Valider" class ="btn btn-success">
-            </div></form> 
-        </div>    
-       </div>  
-    </div>
-    <!-- /.modal-dialog -->
+                      </div>
+                  </div> 
+                                        
+              </div>        
+          </div>
+          <div class="modal-footer justify-content-between">
+              <button type="button" class="btn btn-default fermer" data-dismiss="modal" name="fermerdiag" id="fermerdiag" aria-label="Close">Fermer</button>
+              <input type="submit" value="Valider" class ="btn btn-success">
+          </div></form> 
+      </div>    
+     </div>  
+  </div>
+  <!-- /.modal-dialog -->
 </div>
-  <!-- /.modal -->            
+<!-- /.modal -->            
 
-        
+      
 <script src="{{ asset('js/axios.js') }}"></script>
 <script src="{{ asset('js/cropper.js') }}"></script>
 
 <script>
-document.getElementById("photo_user").style.display = "none";
-document.getElementById("supp_photo").style.display = "none";
+    document.getElementById("photo_user").style.display = "none";
+    document.getElementById("supp_photo").style.display = "none";
+
 //ouverture modal edit
 $('#photo_vide').on('click', function () {
-    $('#editModal').modal('show');
+  $('#editModal').modal('show');
 });
 
-    let cropper;
-    let preview = document.getElementById('photo_view');
-    var file_input = document.getElementById('users_imageFile');
-    function previewFile()
-    {
-        if (typeof cropper != "undefined") 
-            cropper.destroy();
+  let cropper;
+  let preview = document.getElementById('photo_view');
+  var file_input = document.getElementById('users_imageFile');
+  function previewFile()
+  {
+      if (typeof cropper != "undefined") 
+          cropper.destroy();
 
-        let file = file_input.files[0]
-        let reader = new FileReader()
-    
-        reader.addEventListener('load', function (event)
-        {
-            preview.src = reader.result
-        }, false)
-    
-        if (file)
-        {
-            reader.readAsDataURL(file)
-        }
-    };
-    
-    preview.addEventListener('load', function (event)
-    {
-        //let preview = document.getElementById('photo_view'); 
-        cropper = new Cropper(preview, {
-            //aspectRatio: 1/1
-        })
-    });
-    
-    let form = document.getElementById('form_photo');
-    form.addEventListener('submit', function (event)
-    {
-        event.preventDefault()
-        cropper.getCroppedCanvas({
-            maxHeight: 1000,
-            maxWidth: 1000
-        }).toBlob(function (blob)
-        {
-            ajaxWithAxios(blob)
-        })
-    });
-    
-    function ajaxWithAxios(blob)
-    {
-        let data = new FormData(form)
-        data.append('file', blob)
-        axios({
-            method: 'post',
-            url: "{{ path('photoUser')}}",
-            data: data,
-            headers: {'X-Requested-With': 'XMLHttpRequest'}
-        })
-        .then((response) => {
-            cropper.destroy();
-            $('#editModal').modal('hide');
-            document.getElementById("users_photo").value = response.data.filename;
-            document.getElementById("photo_vide").style.display = "none";
-            document.getElementById("photo_user").src = "{{asset('img/utilisateurs/')}}" + response.data.filename;
-            document.getElementById("photo_user").style.display = "inline";
-            document.getElementById("supp_photo").style.display = "inline";
-            console.log(response)
-        })
-        .catch((error) => {
-            console.error(error)
-        })
-    }; 
+      let file = file_input.files[0]
+      let reader = new FileReader()
+  
+      reader.addEventListener('load', function (event)
+      {
+          preview.src = reader.result
+      }, false)
+  
+      if (file)
+      {
+          reader.readAsDataURL(file)
+      }
+  };
+  
+  preview.addEventListener('load', function (event)
+  {
+      //let preview = document.getElementById('photo_view'); 
+      cropper = new Cropper(preview, {
+          //aspectRatio: 1/1
+      })
+  });
+  
+  let form = document.getElementById('form_photo_edit');
+  form.addEventListener('submit', function (event)
+  {
+      event.preventDefault()
+      cropper.getCroppedCanvas({
+          maxHeight: 1000,
+          maxWidth: 1000
+      }).toBlob(function (blob)
+      {
+          ajaxWithAxios(blob)
+      })
+  });
+  
+  function ajaxWithAxios(blob)
+  {
+      let data = new FormData(form)
+      data.append('file', blob)
+      axios({
+          method: 'post',
+          url: "{{ path('photoUser')}}",
+          data: data,
+          headers: {'X-Requested-With': 'XMLHttpRequest'}
+      })
+      .then((response) => {
+          cropper.destroy();
+          $('#editModal').modal('hide');
+          document.getElementById("ldap_users_photo").value = response.data.filename;
+          document.getElementById("photo_vide").style.display = "none";
+          document.getElementById("photo_user").src = "{{asset('img/utilisateurs/')}}" + response.data.filename;
+          document.getElementById("photo_user").style.display = "inline";
+          document.getElementById("supp_photo").style.display = "inline";
+          console.log(response)
+      })
+  }; 
 
 
-    $('#supp_photo').on('click', function () {
-        var file= document.getElementById("users_photo").value;
-        $.ajax({
-            url:"{{ path('photoUserDel') }}",
-            method:"POST",
-            data:{file:file},
-            success:function(data)
-            { 
-                document.getElementById("photo_vide").style.display = "inline";
-                document.getElementById("photo_user").style.display = "none";
-                document.getElementById("supp_photo").style.display = "none";
-                document.getElementById("users_photo").value = '';
+  $('#supp_photo').on('click', function () {
+      var file= document.getElementById("ldap_users_photo").value;
+      var id= document.getElementById("id").value;
+      $.ajax({
+          url:"{{ path('photoUserDel') }}",
+          method:"POST",
+          data:{
+            id:id,
+            file:file
+          },
+          success:function(data)
+          { 
+              document.getElementById("photo_vide").style.display = "inline";
+              document.getElementById("photo_user").style.display = "none";
+              document.getElementById("supp_photo").style.display = "none";
+              document.getElementById("ldap_users_photo").value = '';
 
-            },     
-        });
-    });
+          },     
+      });
+  });
 
 
 //Calendrier
 $('.DATE').datepicker({
-   closeText: 'Fermer',
-   prevText: 'Précédent',
-   nextText: 'Suivant',
-   currentText: 'Aujourd\'hui',
-   monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
-   monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
-   dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
-   dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
-   dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
-   weekHeader: 'Sem.',
-   dateFormat: 'dd/mm/yy',
-   autoclose:true
-   });
+ closeText: 'Fermer',
+ prevText: 'Précédent',
+ nextText: 'Suivant',
+ currentText: 'Aujourd\'hui',
+ monthNames: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+ monthNamesShort: ['Janv.', 'Févr.', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil.', 'Août', 'Sept.', 'Oct.', 'Nov.', 'Déc.'],
+ dayNames: ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
+ dayNamesShort: ['Dim.', 'Lun.', 'Mar.', 'Mer.', 'Jeu.', 'Ven.', 'Sam.'],
+ dayNamesMin: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+ weekHeader: 'Sem.',
+ dateFormat: 'dd/mm/yy',
+ autoclose:true
+ });
 
-        
+      
 </script>
-{% endblock %}
+{% endblock %}        
+
