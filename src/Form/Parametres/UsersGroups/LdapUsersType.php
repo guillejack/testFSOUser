@@ -45,6 +45,10 @@ class LdapUsersType extends AbstractType
             ->add('photo', HiddenType::class, array(
                 'required' => false,
               ))
+              ->add('type', HiddenType::class, array(
+                'required' => true,
+                'data' => 'AD'
+              ))    
             ->add('is_active', CheckboxType::class, [
                 'required' => false,
                 'label'    => "Actif",

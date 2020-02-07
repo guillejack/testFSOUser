@@ -54,6 +54,10 @@ class UsersType extends AbstractType
             ->add('photo', HiddenType::class, array(
                 'required' => false,
               ))
+              ->add('type', HiddenType::class, array(
+                'required' => true,
+                'data' => 'LOCAL'
+              ))  
             ->add('is_active', CheckboxType::class, [
                 'required' => false,
                 'label'    => "Actif",

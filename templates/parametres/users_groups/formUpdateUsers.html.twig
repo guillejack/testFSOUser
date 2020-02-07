@@ -82,8 +82,12 @@
                             {{ form_widget(form.username, {'attr': {'autocomplete':'off',  'class':'col-sm-5 form-control' } } ) }}
                         </div>
                         <div class="col-3">
+                            <div class="row"></div>
                             {{ form_label(form.is_active, "Actif : " , {'label_attr': {'class': 'form-check-label' , 'for':''}} ) }}
-                            {{ form_widget(form.is_active, {'attr': {  'class':' form-control' } } ) }}
+                            {{ form_widget(form.is_active, {'attr': {  'class':' ' } } ) }}
+                            {% if user.type == 'LOCAL' %}
+                            <button type="button" class="btn btn-info" name="changePWD" id="changePWD" >Changer Mot de passe</button>
+                            {% endif %}
                         </div>        
                     </div>
                     <div class="row">
@@ -182,6 +186,45 @@
 </div>
 <!-- /.modal -->            
 
+
+<div class="modal  modal-white" id="pwdModal">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content modal-white ">
+            <div class="modal-header">
+                <h5>Changer de mot de passe</h5>
+                <button type="button" class="close" data-dismiss="modal" name="fermeredit" id="fermeredit" aria-label="Close"></button>
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="pass">Mot de passe:</label>
+                        <input type="password" id="pass" name="password" autocomplete="off">
+                    </div>                                      
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="pass">Confirmation:</label>
+                        <input type="password" id="passConf" name="passwordConf" autocomplete="off">
+                    </div>                                      
+                </div> 
+                <div class="row">
+                    <div class="col-md-12">
+                    <div id ="message">   </div>
+                    </div>                                      
+                </div>           
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default fermer" data-dismiss="modal" name="fermerdiag" id="fermerdiag" aria-label="Close">Fermer</button>
+                <input type="hidden" id="id" name="id" value="{{ user.id }}">
+                <input type="submit" value="Valider" id="validPWD" class ="btn btn-success">
+            </div></form> 
+        </div>    
+       </div>  
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
       
 <script src="{{ asset('js/axios.js') }}"></script>
 <script src="{{ asset('js/cropper.js') }}"></script>
@@ -289,6 +332,32 @@ $('#photo_vide').on('click', function () {
           },     
       });
   });
+
+  $('#changePWD').on('click', function () {
+        $('#pwdModal').modal('show');
+});
+
+$('#validPWD').on('click', function () {
+    var pwd= document.getElementById("pass").value;
+    var pwdConf= document.getElementById("passConf").value;
+    var id= document.getElementById("id").value;
+    if ( pwd == pwdConf ) {
+        $.ajax({
+            url:"{{ path('changePWD') }}",
+            method:"POST",
+            data:{
+              id:id,
+              pwd:pwd
+            },
+            success:function(data)
+            { 
+                $('#pwdModal').modal('hide');
+            },     
+        });
+    }
+    else
+    $('#message').html('<div class="alert alert-info">Le mot de confirmation n\'est pas identique.</div>');
+});
 
 
 //Calendrier

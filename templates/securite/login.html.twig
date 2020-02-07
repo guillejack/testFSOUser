@@ -4,6 +4,20 @@
 <title>Portail - Présence Verte</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="apple-touch-icon" sizes="57x57" href="img/icons/apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="img/icons/apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="img/icons/apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="img/icons/apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="img/icons/apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="img/icons/apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="img/icons/apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="img/icons/apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="img/icons/apple-icon-180x180.png">
+<link rel="icon" type="image/png" sizes="192x192"  href="img/icons/android-icon-192x192.png">
+<link rel="icon" type="image/png" sizes="32x32" href="img/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="96x96" href="img/icons/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="16x16" href="img/icons/favicon-16x16.png">
+<link rel="manifest" href="img/icons/manifest.json">
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 <!-- Custom Theme files -->
 <link href="{{asset('css/login.css')}}" rel="stylesheet" type="text/css" media="all" />
@@ -13,26 +27,37 @@
 <!-- //web font -->
 </head>
 <body>
-	{% if error %}
-    <div class="alert alert-danger">
-        Le login et mdp ne sont pas bon.
-    </div>
-{% endif %}
+
 	<!-- main -->
 	<div class="main-w3layouts wrapper">
 		<h1>Portail - Présence Verte</h1>
 		<div class="main-agileinfo">
 			<div class="agileits-top">
-				<form action="{{ path('login')}}" method="post">
-          <input name="_username" type="text" class="form-control" placeholder="Utilisateur" value="{{lastUserName}}" autofocus />
-          <input type="password" class="form-control" placeholder="Password" name="_password" value="" />
+				<form action="{{ path('verif')}}" method="post">
+          <input name="_username" type="text" class="form-control" placeholder="Utilisateur" value="{{USERNAME}}" autofocus autocomplete="off" />
+          <input type="password" class="form-control" placeholder="Password" name="_password" value="" autocomplete="off" />
 					<input type="submit" value="Connexion">
 				</form>
+				{% if ERROR == 'INVALID_CREDENTIALS_LDAP' %}
+				<div class="row">
+					<div class="alert alert-danger text-center">
+						<strong>Vous n'êtes pas autorisés à accéder.</strong>
+					</div>
+				</div>
+				{% endif %}
+	  
+				{% if ERROR == 'INVALID_CREDENTIALS_DATABASE' %}
+				<div class="row">
+					<div class="alert alert-danger text-center">
+						<strong>Votre mot de passe n'est pas correct ou vous n'êtes pas dans la base.</strong>
+					</div>
+				</div>
+				{% endif %}	
 			</div>
 		</div>
 		<!-- copyright -->
 		<div class="colorlibcopy-agile">
-			<p>© 2018 Colorlib Signup Form. All rights reserved | Design by <a href="https://colorlib.com/" target="_blank">Colorlib</a></p>
+			<p>© 2020-2020 Présence Verte.</p>
 		</div>
 		<!-- //copyright -->
 		<ul class="colorlib-bubbles">

@@ -81,8 +81,7 @@ class UsersManageController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-            //$passwordCrypte = $encoder->encodePassword($users, $users->getPassword());
-            //$users->setPassword($passwordCrypte);
+
             $om->persist($users);
             $om->flush();
             $this->addFlash('success', "L'action a été effectué");
@@ -228,6 +227,27 @@ class UsersManageController extends AbstractController
             return new JsonResponse(array('reponse' => 'ok'));
         }
         
-    } 
+    }
+     /**
+     * @Route("/parametres/users_groups/users/photo/changepwd/", name="changePWD", methods={"POST"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function changePassword(Request $request,EntityManagerInterface $om, UsersRepository $repository,UserPasswordEncoderInterface $encoder)
+    {
+        if ($request->isXmlHttpRequest())
+        {
+            //recupere dans la base l'enregistrement
+            $users = $repository->find(
+                $request->get('id')
+            );
+            $passwordCrypte = $encoder->encodePassword($users, $request->get('pwd'));
+            $users->setPassword($passwordCrypte);
+            $om->persist($users);
+            $om->flush();
+            return new JsonResponse(array('reponse' => 'ok'));
+        }
+        
+    }  
 
 }

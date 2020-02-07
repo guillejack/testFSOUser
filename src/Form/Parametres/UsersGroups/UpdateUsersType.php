@@ -47,6 +47,9 @@ class UpdateUsersType extends AbstractType
             ->add('photo', HiddenType::class, array(
                 'required' => false,
               ))
+              ->add('type', HiddenType::class, array(
+                'required' => true,
+              )) 
             ->add('service' , EntityType::class, [
                 'class' => Services::class,
                 'choice_label' => 'name',

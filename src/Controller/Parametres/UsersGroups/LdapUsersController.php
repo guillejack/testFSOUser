@@ -63,8 +63,8 @@ class LdapUsersController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){
-            //$passwordCrypte = $encoder->encodePassword($users, $users->getPassword());
-            //$users->setPassword($passwordCrypte);
+            $passwordCrypte = $encoder->encodePassword($users, random_bytes(10));
+            $users->setPassword($passwordCrypte);
             $om->persist($users);
             $om->flush();
             $this->addFlash('success', "L'action a été effectué");

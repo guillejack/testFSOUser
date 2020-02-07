@@ -25,3 +25,10 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    ldap:
+        class: App\Services\Utils\Ldap
+        arguments: ["@service_container", "@request_stack"]
+
+    userManager:
+        class:  App\Services\User\UserManager
+        arguments: ["@doctrine.orm.entity_manager", "@service_container", "@request_stack", "@session"]

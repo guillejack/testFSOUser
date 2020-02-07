@@ -3,28 +3,29 @@ security:
     encoders:
         App\Entity\Parametres\UsersGroups\Users:
             algorithm: auto
+
     providers:
-        in_memory: { memory: null }
-        in_database:
+        db_provider:
             entity:
                 class: App\Entity\Parametres\UsersGroups\Users
-                property: username
+                property: users
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: lazy
-
-            provider: in_database
-
+            anonymous: true
+            #anonymous: true
+            #pattern: ^/login$
             form_login:
-                 login_path: login
-                 check_path: login
+                login_path: login
+                check_path: login
 
-            logout:
-                path : deconnexion
-                target: login
+        login:
+            pattern:  ^/login$
+            security: false
+
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#firewalls-authentication
@@ -35,6 +36,33 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+      # - { path: ^/, roles: ROLE_USER }
+       - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+       - { path: ^/, roles: ROLE_USER }
+
+
+       # main:
+       #     anonymous: lazy
+
+        #    provider: in_database
+
+        #    form_login:
+        #         login_path: login
+        #         check_path: login
+
+        #    logout:
+        #        path : deconnexion
+        #        target: login
+
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    #access_control:
       # - { path: ^/, roles: ROLE_USER }
       # - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       # - { path: ^/, roles: ROLE_USER }

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Parametres\UsersGroups\Users;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use WhiteOctober\BreadcrumbsBundle\Model\Breadcrumbs;
@@ -18,7 +19,7 @@ class AppController extends AbstractController
        // $breadcrumbs->addItem("Accueil", $this->get("router")->generate("dash_board"));
 
 
-
+       $user= $this->get('security.token_storage')->getToken()->getUser();
 
     // Add "homepage" route link at the start of the breadcrumbs
     $breadcrumbs->prependRouteItem("Accueil", "dash_board");
@@ -26,6 +27,7 @@ class AppController extends AbstractController
 
         return $this->render('dashboard/dashboard/index.html.twig', [
             'controller_name' => 'DashBoardController',
+            'user' => $user
         ]);
     }
 
@@ -42,7 +44,7 @@ class AppController extends AbstractController
           /**
      * @Route("/login", name="login")
      */
-    public function login(AuthenticationUtils $util)
+/*     public function login(AuthenticationUtils $util)
     {
 
 
@@ -53,7 +55,7 @@ class AppController extends AbstractController
 
         ]);
 
-    }
+    } */
 
      /**
      * @Route("/login/verif", name="verif")
