@@ -43,10 +43,10 @@ class LoginController extends AbstractController
               }
         }
 
-        return $this->render('securite/login.html.twig', [
+       /* return $this->render('securite/login.html.twig', [
             'ERROR' => $arrViewData['ERROR'],
             'USERNAME' => $arrViewData['USERNAME'],
-            ]);
+            ]);*/
     }
 
      /**

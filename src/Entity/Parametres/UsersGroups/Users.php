@@ -303,7 +303,7 @@ class Users implements UserInterface
     public function getRoles()
     {
         $roles = array();
-        //$roles[] = "ROLE_USER";
+        $roles[] = "ROLE_USER";
         foreach ($this->Groupes as $role) {
             $roles[] = $role->getRole();
         }

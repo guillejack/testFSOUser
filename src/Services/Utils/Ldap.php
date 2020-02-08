@@ -54,9 +54,7 @@
           // Get username and password form login form
           private function getLdapUsernameAndPassword()
           {
-                
-            //$request = $this->requestStack->getCurrentRequest();
-            //$this->strUserEmail  = $request->     
+
             $this->strUserEmail  = $this->request->getCurrentRequest()->get('_username');
             $this->strUserPasswd = $this->request->getCurrentRequest()->get('_password');
  
@@ -123,8 +121,6 @@
                               @ldap_close($this->objLdapConnection);
       
                               // login user
-                              //$objUserServ = $this->container->get('userManager');
-                              //$this->objUserServ->loginAction($this->strUserEmail);
                               $this->objUserServ->createLoginSession();
                         } 
                         else {

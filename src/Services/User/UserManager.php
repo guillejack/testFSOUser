@@ -1,12 +1,4 @@
-<?php
-
-use App\Entity\Parametres\UsersGroups\Users;
-
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
- 
-      // src/Services/User/UserManager.php
- 
+<?php    
       namespace App\Services\User;
  
       use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
@@ -26,32 +18,19 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
       {
             private $container, $em, $request, $session, $user,$passwordCrypt,$users;
  
-            public function __construct(EntityManagerInterface $em, ContainerInterface $container, RequestStack $request , SessionInterface $session, UserPasswordEncoderInterface $passwordCrypt, Users $users )
+            public function __construct(EntityManagerInterface $em, ContainerInterface $container, RequestStack $request , SessionInterface $session, UserPasswordEncoderInterface $passwordCrypt )
             {
-                  //$entityManager = $this->getDoctrine()->getManager('enquete_conv');
                   $this->em = $em;
                   $this->request = $request;
                   $this->container = $container;
                   $this->session = $session;
                   $this->passwordCrypt = $passwordCrypt;
-                  $this->users =$users ;
 
             }
  
-            // checks if user exists when login form has been submitted
-/*             public function loginAction($strUsername)
-            {
-                  if( ! $this->checkUserExists($strUsername) )
-                  {
-                        // create new user
-                        //$this->createUser($strUsername);
-                  }
- 
-                  $this->createLoginSession();
-            } */
- 
+
             // get user data from database
-            public function getUser($strUsername)
+            public function getUserDatabase($strUsername)
             {
                   return $this->em->getRepository('App:Parametres\UsersGroups\Users')->findOneBy( array('username' => $strUsername) );
             }
@@ -59,14 +38,14 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
             // Check if a user exists on database
             public function checkUserExists($strUsername)
             {
-                  $this->user = $this->getUser($strUsername);
+                  $this->user = $this->getUserDatabase($strUsername);
                   return ( ! empty($this->user)) ? true : false;
             }
 
             // Check if a user exists on database
             public function checkUserPasswordExists($strUsername, $strPassword)
             {
-                  $this->user = $this->getUser($strUsername);
+                  $this->user = $this->getUserDatabase($strUsername);
                   if  ( ! empty($this->user)) {
                         if ($this->passwordCrypt->isPasswordValid($this->user, $strPassword ))
                               return true;
@@ -75,44 +54,15 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
                   }
                   
                   
-                  return ( ! empty($this->user)) ? true : false;
+                  return false;
             } 
-            // Create new user on database
-/*              public function createUser($strUsername)
-            {
-                  $boolResult = false;
-                  $objCurrentDatetime = new \Datetime();
- 
-                  try
-                  {
-                        $objUser = new User();
-                        $objUser->setUser($strUsername);
-                        $objUser->setCreationDate($objCurrentDatetime);
-                        $objUser->setLastLoginDate($objCurrentDatetime);
- 
-                        // save data
-                        $this->em->persist($objUser);
-                        $this->em->flush();
- 
-                        // result data
-                        $boolResult = true;
- 
-                        // user obj
-                        $this->user = $objUser;
-                  }
-                  catch(Exception $ex)
-                  {
-                        echo $ex->getMessage();
-                  }
- 
-                  return $boolResult;
-            }  */
+
   
             // creates login session
             public function createLoginSession()
             {
-                  $objToken = new UsernamePasswordToken($this->user->getUsername(), null, 'main',  $this->user->getRoles()) ;//$this->user->getRole() ['ROLE_USER'] 
- 
+                  $objToken = new UsernamePasswordToken($this->user, null, 'db_provider',  $this->user->getRoles()) ;//$this->user->getRole() ['ROLE_USER'] 
+
                   // update user last login
                   $this->user->setLastLoginDate( new \Datetime() );
                   $this->em->persist($this->user);
@@ -127,10 +77,9 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
             public function logOutUser()
             {
                   $this->container->get('security.token_storage')->setToken(null);
+                  $this->session->clear();
                   $this->session->invalidate();
- 
-                 // $url = $router->generate('oportunidades');
-                 //   return $this->redirect($url);
+
             }
  
       }

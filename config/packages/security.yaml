@@ -8,7 +8,7 @@ security:
         db_provider:
             entity:
                 class: App\Entity\Parametres\UsersGroups\Users
-                property: users
+                property: username
 
     firewalls:
         dev:
@@ -19,8 +19,8 @@ security:
             #anonymous: true
             #pattern: ^/login$
             form_login:
-                login_path: login
-                check_path: login
+                login_path: /login
+                check_path: /login
 
         login:
             pattern:  ^/login$
@@ -36,7 +36,6 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-      # - { path: ^/, roles: ROLE_USER }
        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
        - { path: ^/, roles: ROLE_USER }
 
